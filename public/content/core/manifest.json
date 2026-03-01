@@ -1,0 +1,21 @@
+{
+  "id": "core",
+  "name": "Core English",
+  "description": "Phrases, vocabulary and sentences for everyday English",
+  "type": "core",
+  "dialect": "both",
+  "translation": "zh-TW",
+  "version": 1,
+  "files": [
+    "phrase_part1_clean.csv",
+    "phrase_part2_clean.csv",
+    "phrase_part3_clean.csv",
+    "vocabulary_part1_clean.csv",
+    "vocabulary_part2_clean.csv",
+    "vocabulary_part3_clean.csv",
+    "sentence_part1.csv",
+    "sentence_part2.csv",
+    "sentence_part3.csv"
+  ],
+  "premium": false
+}
