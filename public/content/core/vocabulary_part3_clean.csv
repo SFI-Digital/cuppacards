@@ -90,7 +90,7 @@ Verbs - Action,disagree,verb,不同意,to differ in opinion,I disagree with that
 Verbs - Action,hope,verb,希望,to want something good to happen,I hope to see you soon.
 Verbs - Action,wish,verb,祝願,to want something that may not happen,I wish you luck.
 Verbs - Action,thank,verb,感謝,to express gratitude,Thank you for coming.
-Verbs - Action,apologize,verb,道歉,to express regret,He apologized for being late.
+Verbs - Action,apologise,verb,道歉,to express regret,He apologised for being late.
 Verbs - Action,explain,verb,解釋,to make something clear,Please explain this to me.
 Verbs - Action,describe,verb,描述,to give details of something,Describe what you saw.
 Verbs - Action,discuss,verb,討論,to talk about something in detail,Let's discuss this now.
@@ -174,7 +174,7 @@ Verbs - Action,prepare,verb,準備,to make something ready,She prepared dinner.
 Verbs - Action,provide,verb,提供,to supply something,The hotel provides breakfast.
 Verbs - Action,include,verb,包括,to contain as part of the whole,The price includes tax.
 Verbs - Action,accept,verb,接受,to agree to take something,She accepted the offer.
-Verbs - Action,refuse,verb,拒絕,to say no to something,He refused to apologize.
+Verbs - Action,refuse,verb,拒絕,to say no to something,He refused to apologise.
 Verbs - Action,offer,verb,提供提出,to present something for consideration,She offered to help.
 Verbs - Action,request,verb,請求,to formally ask for something,He requested a meeting.
 Verbs - Action,suggest,verb,建議,to propose something,I suggest we leave early.
@@ -184,8 +184,8 @@ Verbs - Action,warn,verb,警告,to tell of a danger,Warn them about the ice.
 Verbs - Action,promise,verb,承諾,to say you will definitely do something,She promised to call.
 Verbs - Action,confirm,verb,確認,to verify something is true,Please confirm your attendance.
 Verbs - Action,cancel,verb,取消,to decide not to proceed,She cancelled the order.
-Verbs - Action,arrange,verb,安排,to organize or plan something,Can you arrange a meeting?
-Verbs - Action,organize,verb,組織,to plan and coordinate,He organized the event.
+Verbs - Action,arrange,verb,安排,to organise or plan something,Can you arrange a meeting?
+Verbs - Action,organise,verb,組織,to plan and coordinate,He organised the event.
 Verbs - Action,manage,verb,管理設法,to be in charge of or to succeed in,She manages a team of ten.
 Verbs - Action,achieve,verb,實現,to successfully reach a goal,He achieved his goal.
 Verbs - Action,complete,verb,完成,to finish something fully,Complete the form.

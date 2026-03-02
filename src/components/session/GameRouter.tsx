@@ -1,0 +1,75 @@
+"use client"
+
+import { useMemo } from "react"
+import Flashcard from "@/components/games/Flashcard"
+import MultipleChoice from "@/components/games/MultipleChoice"
+import FillInBlank from "@/components/games/FillInBlank"
+import Listening from "@/components/games/Listening"
+import Translation from "@/components/games/Translation"
+import { generateOptions } from "@/lib/games/optionGenerator"
+import type { ContentCard, SessionCard } from "@/types"
+
+interface GameRouterProps {
+  card: SessionCard
+  allCards: ContentCard[]
+  onAnswer: (correct: boolean) => void
+}
+
+export default function GameRouter({
+  card,
+  allCards,
+  onAnswer,
+}: GameRouterProps) {
+  const mcOptions = useMemo(() => {
+    if (
+      card.gameFormat === "multiple-choice" ||
+      card.gameFormat === "listening"
+    ) {
+      return generateOptions(card.content, allCards, card.direction)
+    }
+    return []
+  }, [card, allCards])
+
+  const directionLabel =
+    card.direction === "en→zh" ? "English → 中文" : "中文 → English"
+
+  // Unique key per card so React fully remounts each game component,
+  // resetting all internal state (flipped, selected, input, etc.)
+  const cardKey = `${card.content.id}::${card.direction}::${card.gameFormat}`
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-zinc-400">{directionLabel}</span>
+        <span className="rounded bg-zinc-200 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+          {card.gameFormat}
+        </span>
+      </div>
+
+      {card.gameFormat === "flashcard" && (
+        <Flashcard key={cardKey} card={card} onAnswer={onAnswer} />
+      )}
+
+      {card.gameFormat === "multiple-choice" && (
+        <MultipleChoice
+          key={cardKey}
+          card={card}
+          options={mcOptions}
+          onAnswer={onAnswer}
+        />
+      )}
+
+      {card.gameFormat === "fill-in-blank" && (
+        <FillInBlank key={cardKey} card={card} onAnswer={onAnswer} />
+      )}
+
+      {card.gameFormat === "listening" && (
+        <Listening key={cardKey} card={card} allCards={allCards} onAnswer={onAnswer} />
+      )}
+
+      {card.gameFormat === "translation" && (
+        <Translation key={cardKey} card={card} onAnswer={onAnswer} />
+      )}
+    </div>
+  )
+}

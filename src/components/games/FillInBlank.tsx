@@ -1,0 +1,94 @@
+"use client"
+
+import { useState, useMemo } from "react"
+import Card from "@/components/ui/Card"
+import Button from "@/components/ui/Button"
+import AudioButton from "@/components/ui/AudioButton"
+import { generateBlank } from "@/lib/games/blankGenerator"
+import type { SessionCard } from "@/types"
+
+interface FillInBlankProps {
+  card: SessionCard
+  onAnswer: (correct: boolean) => void
+}
+
+export default function FillInBlank({ card, onAnswer }: FillInBlankProps) {
+  const [input, setInput] = useState("")
+  const [submitted, setSubmitted] = useState(false)
+
+  const blank = useMemo(() => generateBlank(card.content), [card.content])
+
+  const isCorrect =
+    input.trim().toLowerCase() === blank.answer.toLowerCase()
+
+  const handleSubmit = () => {
+    if (submitted || input.trim() === "") return
+    setSubmitted(true)
+    setTimeout(() => onAnswer(isCorrect), 1000)
+  }
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <p className="mb-1 text-xs font-medium text-indigo-500">
+          {card.content.category}
+        </p>
+
+        <p className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+          {blank.display}
+        </p>
+
+        {card.direction === "en→zh" && (
+          <p className="mt-2 text-sm text-zinc-400">
+            {card.content.back.text}
+          </p>
+        )}
+      </Card>
+
+      <div className="space-y-3">
+        <input
+          type="text"
+          value={input}
+          onChange={(e) => !submitted && setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+          placeholder="Type the missing word…"
+          disabled={submitted}
+          autoFocus
+          className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
+        />
+
+        {submitted && (
+          <div
+            className={`rounded-xl px-4 py-3 text-sm font-medium ${
+              isCorrect
+                ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
+                : "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300"
+            }`}
+          >
+            {isCorrect ? (
+              "Correct!"
+            ) : (
+              <>
+                The answer is: <strong>{blank.answer}</strong>
+              </>
+            )}
+          </div>
+        )}
+
+        {!submitted && (
+          <Button
+            variant="primary"
+            size="lg"
+            className="w-full"
+            onClick={handleSubmit}
+            disabled={input.trim() === ""}
+          >
+            Check
+          </Button>
+        )}
+      </div>
+
+      <AudioButton text={card.content.front.text} />
+    </div>
+  )
+}
