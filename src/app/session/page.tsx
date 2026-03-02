@@ -42,11 +42,21 @@ export default function SessionPage() {
   const handleAnswer = (correct: boolean) => {
     if (!currentCard) return
     answerCurrent(correct)
-    updateProgress(currentCard.content.id, currentCard.direction, correct)
+    // Only update SRS progress for non-read-aloud cards
+    if (currentCard.gameFormat !== "read-aloud") {
+      updateProgress(currentCard.content.id, currentCard.direction, correct)
+    }
 
     setTimeout(() => {
       nextCard()
     }, currentCard.gameFormat === "flashcard" ? 0 : 200)
+  }
+
+  // For read-aloud cards, just advance without scoring
+  const handleNext = () => {
+    if (!currentCard) return
+    answerCurrent(true) // mark as "done" for session tracking
+    nextCard()
   }
 
   if (queue.length === 0 || !currentCard) return null
@@ -59,6 +69,7 @@ export default function SessionPage() {
         card={currentCard}
         allCards={cards}
         onAnswer={handleAnswer}
+        onNext={handleNext}
       />
     </div>
   )

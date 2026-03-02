@@ -9,11 +9,9 @@ import Button from "@/components/ui/Button"
 
 export default function SettingsPage() {
   const accent = useSettingsStore((s) => s.accent)
-  const direction = useSettingsStore((s) => s.direction)
   const region = useSettingsStore((s) => s.region)
   const enabledPacks = useSettingsStore((s) => s.enabledPacks)
   const setAccent = useSettingsStore((s) => s.setAccent)
-  const setDirection = useSettingsStore((s) => s.setDirection)
   const setRegion = useSettingsStore((s) => s.setRegion)
   const togglePack = useSettingsStore((s) => s.togglePack)
 
@@ -58,32 +56,6 @@ export default function SettingsPage() {
               }`}
             >
               {a === "en-GB" ? "英式" : "美式"}
-            </button>
-          ))}
-        </div>
-      </Card>
-
-      {/* Direction */}
-      <Card>
-        <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          測驗方向
-        </h3>
-        <div className="flex gap-2">
-          {([
-            { value: "both", label: "雙向" },
-            { value: "en→zh", label: "英 → 中" },
-            { value: "zh→en", label: "中 → 英" },
-          ] as const).map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => setDirection(opt.value)}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                direction === opt.value
-                  ? "bg-indigo-600 text-white"
-                  : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-              }`}
-            >
-              {opt.label}
             </button>
           ))}
         </div>

@@ -74,7 +74,15 @@ export function speak(
         if (voice) utterance.voice = voice
 
         utterance.onend = () => resolve()
-        utterance.onerror = (e) => reject(e)
+        utterance.onerror = (e) => {
+          // Ignore "canceled" errors — these are expected when we call cancel()
+          // before starting a new utterance
+          if (e.error === "canceled") {
+            resolve()
+            return
+          }
+          reject(e)
+        }
 
         window.speechSynthesis.speak(utterance)
       }),

@@ -57,6 +57,7 @@ export type GameFormat =
   | "fill-in-blank"
   | "listening"
   | "translation"
+  | "read-aloud"
 
 export interface SessionCard {
   content: ContentCard

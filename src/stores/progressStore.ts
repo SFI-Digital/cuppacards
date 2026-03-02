@@ -83,17 +83,20 @@ export const useProgressStore = create<ProgressStore>((set, get) => ({
   },
 
   getDueCount: (cards) => {
+    // Exclude sentences — they don't use SRS
+    const srsCards = cards.filter((c) => c.type !== "sentence")
+    const srsCardIds = new Set(srsCards.map((c) => c.id))
     const { progress } = get()
     const today = todayISO()
 
     // Count due cards (existing progress with dueDate <= today)
     const dueFromProgress = Object.values(progress).filter(
-      (r) => r.state !== "new" && r.dueDate <= today,
+      (r) => srsCardIds.has(r.cardId) && r.state !== "new" && r.dueDate <= today,
     ).length
 
     // Count new cards (no progress record at all)
     const trackedIds = new Set(Object.values(progress).map((r) => r.cardId))
-    const newCards = cards.filter((c) => !trackedIds.has(c.id)).length
+    const newCards = srsCards.filter((c) => !trackedIds.has(c.id)).length
 
     return dueFromProgress + newCards
   },

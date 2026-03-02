@@ -28,6 +28,35 @@ export default function SessionResult({
   onBackHome,
   onReplayIncorrect,
 }: SessionResultProps) {
+  const isSentenceSession = queue.every(
+    (sc) => sc.gameFormat === "read-aloud",
+  )
+
+  // Sentence sessions: simple completion screen
+  if (isSentenceSession) {
+    return (
+      <div className="space-y-6 py-8">
+        <Card className="text-center">
+          <p className="text-5xl font-bold text-indigo-600">
+            {queue.length}
+          </p>
+          <p className="mt-1 text-lg text-zinc-400">句</p>
+          <p className="mt-2 text-zinc-500 dark:text-zinc-400">
+            句子練習完成！
+          </p>
+        </Card>
+        <Button
+          variant="secondary"
+          size="lg"
+          className="w-full"
+          onClick={onBackHome}
+        >
+          返回首頁
+        </Button>
+      </div>
+    )
+  }
+
   const correctCount = answers.filter((a) => a.correct).length
   const total = queue.length
   const percentage = total > 0 ? Math.round((correctCount / total) * 100) : 0

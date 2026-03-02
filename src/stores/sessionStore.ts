@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { buildSession, buildReviewSession, buildSentenceChallenge } from "@/lib/srs/scheduler"
+import { buildSession, buildReviewSession, buildSentencePractice } from "@/lib/srs/scheduler"
 import { pickFormat } from "@/lib/games/formatPicker"
 import type { ContentCard, ProgressRecord, SessionCard } from "@/types"
 
@@ -15,7 +15,7 @@ interface SessionStore {
   isActive: boolean
   startSession: (cards: ContentCard[], progress: Record<string, ProgressRecord>) => void
   startReviewSession: (cards: ContentCard[], progress: Record<string, ProgressRecord>) => void
-  startSentenceChallenge: (cards: ContentCard[], progress: Record<string, ProgressRecord>) => void
+  startSentencePractice: (cards: ContentCard[]) => void
   answerCurrent: (correct: boolean) => void
   nextCard: () => void
   endSession: () => void
@@ -50,8 +50,8 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
     })
   },
 
-  startSentenceChallenge: (cards, progress) => {
-    const queue = buildSentenceChallenge(cards, progress)
+  startSentencePractice: (cards) => {
+    const queue = buildSentencePractice(cards)
     set({
       queue,
       currentIndex: 0,

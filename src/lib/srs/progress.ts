@@ -47,8 +47,12 @@ export function getNewCardIds(
 }
 
 export function getStats(allCards: ContentCard[]): Stats {
+  // Exclude sentences from stats — they use read-aloud, not SRS
+  const srsCards = allCards.filter((c) => c.type !== "sentence")
+  const srsCardIds = new Set(srsCards.map((c) => c.id))
+
   const all = getAllProgress()
-  const records = Object.values(all)
+  const records = Object.values(all).filter((r) => srsCardIds.has(r.cardId))
 
   const byState = {
     new: 0,
@@ -70,11 +74,11 @@ export function getStats(allCards: ContentCard[]): Stats {
 
   // Count cards with no progress as "new"
   const trackedCardIds = new Set(records.map((r) => r.cardId))
-  const untrackedNew = allCards.filter((c) => !trackedCardIds.has(c.id)).length
+  const untrackedNew = srsCards.filter((c) => !trackedCardIds.has(c.id)).length
   byState.new += untrackedNew
 
   return {
-    total: allCards.length,
+    total: srsCards.length,
     byState,
     accuracy: totalReviews > 0 ? correctReviews / totalReviews : 0,
     streak: maxStreak,

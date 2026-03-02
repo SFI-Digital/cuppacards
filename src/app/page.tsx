@@ -14,7 +14,7 @@ export default function Home() {
   const packs = useContentStore((s) => s.packs)
   const isLoading = useContentStore((s) => s.isLoading)
   const startSession = useSessionStore((s) => s.startSession)
-  const startSentenceChallenge = useSessionStore((s) => s.startSentenceChallenge)
+  const startSentencePractice = useSessionStore((s) => s.startSentencePractice)
   const progressData = useProgressStore((s) => s.progress)
 
   const { stats, dayStreak, dueCount } = useProgress()
@@ -25,9 +25,9 @@ export default function Home() {
     router.push("/session")
   }
 
-  const handleSentenceChallenge = () => {
+  const handleSentencePractice = () => {
     if (cards.length === 0) return
-    startSentenceChallenge(cards, progressData)
+    startSentencePractice(cards)
     router.push("/session")
   }
 
@@ -85,9 +85,9 @@ export default function Home() {
             variant="secondary"
             size="md"
             className="w-full"
-            onClick={handleSentenceChallenge}
+            onClick={handleSentencePractice}
           >
-            句子挑戰
+            句子練習
           </Button>
         )}
       </div>

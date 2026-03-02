@@ -30,7 +30,13 @@ export default function ProgressPage() {
   const dayStreak = useProgressStore((s) => s.dayStreak)
   const progress = useProgressStore((s) => s.progress)
 
-  const records = Object.values(progress)
+  // Exclude sentences from stats — they use read-aloud, not SRS
+  const srsCardIds = new Set(
+    cards.filter((c) => c.type !== "sentence").map((c) => c.id),
+  )
+  const records = Object.values(progress).filter((r) =>
+    srsCardIds.has(r.cardId),
+  )
   const totalReviews = records.reduce((sum, r) => sum + r.totalReviews, 0)
   const correctReviews = records.reduce((sum, r) => sum + r.correctReviews, 0)
 

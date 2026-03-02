@@ -12,12 +12,6 @@ const FORMAT_RULES: Record<string, GameFormat[]> = {
   "vocabulary::learning": ["flashcard", "multiple-choice"],
   "vocabulary::review": ["flashcard", "multiple-choice", "translation"],
   "vocabulary::mastered": ["multiple-choice", "translation"],
-
-  // Sentences
-  "sentence::new": ["flashcard"],
-  "sentence::learning": ["flashcard", "fill-in-blank"],
-  "sentence::review": ["flashcard", "fill-in-blank", "listening"],
-  "sentence::mastered": ["fill-in-blank", "listening", "translation"],
 }
 
 export function pickFormat(

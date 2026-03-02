@@ -21,64 +21,58 @@ function makeKey(cardId: string, direction: Direction): string {
   return `${cardId}::${direction}`
 }
 
+/**
+ * Pick direction based on card state:
+ * - new/learning → always en→zh (see English, recall Chinese)
+ * - review/mastered → randomly en→zh or zh→en
+ */
+function pickDirection(state: ProgressRecord["state"]): Direction {
+  if (state === "new" || state === "learning") return "en→zh"
+  return Math.random() < 0.5 ? "en→zh" : "zh→en"
+}
+
 export function buildSession(
   allCards: ContentCard[],
   allProgress: Record<string, ProgressRecord>,
 ): SessionCard[] {
   const today = todayISO()
 
-  // 1. Find due cards
-  const dueRecords = Object.values(allProgress).filter(
-    (r) => r.state !== "new" && r.dueDate <= today,
-  )
+  // Only phrases and vocabulary — sentences are separate
+  const eligibleCards = allCards.filter((c) => c.type !== "sentence")
 
-  // 2. Split by direction for balance
-  const dueEnZh = dueRecords.filter((r) => r.direction === "en→zh")
-  const dueZhEn = dueRecords.filter((r) => r.direction === "zh→en")
+  // 1. Find due cards (exclude sentences)
+  const cardMap = new Map(eligibleCards.map((c) => [c.id, c]))
+  const dueRecords = Object.values(allProgress).filter((r) => {
+    const card = cardMap.get(r.cardId)
+    return card && r.state !== "new" && r.dueDate <= today
+  })
 
-  // Take roughly equal from each direction
-  const halfSize = Math.floor(SESSION_SIZE / 2)
-  const selectedDue: ProgressRecord[] = []
-
-  const fromEnZh = shuffle(dueEnZh).slice(0, halfSize)
-  const fromZhEn = shuffle(dueZhEn).slice(0, halfSize)
-  selectedDue.push(...fromEnZh, ...fromZhEn)
-
-  // If one direction had fewer, fill from the other
-  if (selectedDue.length < SESSION_SIZE) {
-    const remaining = SESSION_SIZE - selectedDue.length
-    const usedKeys = new Set(selectedDue.map((r) => makeKey(r.cardId, r.direction)))
-
-    const leftover = [...dueEnZh, ...dueZhEn].filter(
-      (r) => !usedKeys.has(makeKey(r.cardId, r.direction)),
-    )
-    selectedDue.push(...shuffle(leftover).slice(0, remaining))
-  }
-
-  // 3. Build SessionCards from due records
-  const cardMap = new Map(allCards.map((c) => [c.id, c]))
+  // 2. Build SessionCards from due records
   const sessionCards: SessionCard[] = []
 
-  for (const record of selectedDue) {
+  for (const record of shuffle(dueRecords).slice(0, SESSION_SIZE)) {
     const content = cardMap.get(record.cardId)
     if (!content) continue
+
+    // For due cards, use system-controlled direction based on state
+    const direction = pickDirection(record.state)
 
     sessionCards.push({
       content,
       progress: record,
       gameFormat: pickFormat(content.type, record.state),
-      direction: record.direction,
+      direction,
     })
   }
 
-  // 4. Top up with new cards if needed (phrases first, then vocabulary, then sentences)
+  // 3. Top up with new cards if needed (phrases first, then vocabulary)
   if (sessionCards.length < SESSION_SIZE) {
     const usedCardIds = new Set(sessionCards.map((sc) => sc.content.id))
-    const typePriority: ContentCard["type"][] = ["phrase", "vocabulary", "sentence"]
+    const typePriority: ContentCard["type"][] = ["phrase", "vocabulary"]
 
     const newCards: ContentCard[] = []
     for (const type of typePriority) {
-      const cardsOfType = allCards.filter(
+      const cardsOfType = eligibleCards.filter(
         (c) =>
           c.type === type &&
           !usedCardIds.has(c.id) &&
@@ -91,10 +85,9 @@ export function buildSession(
     const needed = SESSION_SIZE - sessionCards.length
     const toAdd = shuffle(newCards).slice(0, needed)
 
-    // Alternate directions for new cards
-    for (let i = 0; i < toAdd.length; i++) {
-      const card = toAdd[i]
-      const direction: Direction = i % 2 === 0 ? "en→zh" : "zh→en"
+    // New cards always en→zh
+    for (const card of toAdd) {
+      const direction: Direction = "en→zh"
       const record = createInitialRecord(card.id, direction)
 
       sessionCards.push({
@@ -106,21 +99,24 @@ export function buildSession(
     }
   }
 
-  // 5. Shuffle and cap
+  // 4. Shuffle and cap
   return shuffle(sessionCards).slice(0, SESSION_SIZE)
 }
 
 /**
  * Build a review session containing only "learning" state cards.
+ * Excludes sentences.
  */
 export function buildReviewSession(
   allCards: ContentCard[],
   allProgress: Record<string, ProgressRecord>,
 ): SessionCard[] {
-  const cardMap = new Map(allCards.map((c) => [c.id, c]))
+  const cardMap = new Map(
+    allCards.filter((c) => c.type !== "sentence").map((c) => [c.id, c]),
+  )
 
   const learningRecords = Object.values(allProgress)
-    .filter((r) => r.state === "learning")
+    .filter((r) => r.state === "learning" && cardMap.has(r.cardId))
     .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
 
   const sessionCards: SessionCard[] = []
@@ -133,7 +129,7 @@ export function buildReviewSession(
       content,
       progress: record,
       gameFormat: pickFormat(content.type, record.state),
-      direction: record.direction,
+      direction: "en→zh", // learning cards always en→zh
     })
   }
 
@@ -141,56 +137,21 @@ export function buildReviewSession(
 }
 
 /**
- * Build a session containing only sentence cards.
+ * Build a sentence practice session (read-aloud, no SRS).
  */
-export function buildSentenceChallenge(
+export function buildSentencePractice(
   allCards: ContentCard[],
-  allProgress: Record<string, ProgressRecord>,
 ): SessionCard[] {
   const sentenceCards = allCards.filter((c) => c.type === "sentence")
-  const cardMap = new Map(sentenceCards.map((c) => [c.id, c]))
-  const sessionCards: SessionCard[] = []
 
-  const today = todayISO()
-  const dueRecords = Object.values(allProgress).filter((r) => {
-    const card = cardMap.get(r.cardId)
-    return card && r.state !== "new" && r.dueDate <= today
-  })
+  const sessionCards: SessionCard[] = shuffle(sentenceCards)
+    .slice(0, SESSION_SIZE)
+    .map((card) => ({
+      content: card,
+      progress: createInitialRecord(card.id, "en→zh"),
+      gameFormat: "read-aloud" as SessionCard["gameFormat"],
+      direction: "en→zh" as Direction,
+    }))
 
-  for (const record of dueRecords) {
-    const content = cardMap.get(record.cardId)
-    if (!content) continue
-    sessionCards.push({
-      content,
-      progress: record,
-      gameFormat: pickFormat("sentence", record.state),
-      direction: record.direction,
-    })
-  }
-
-  if (sessionCards.length < SESSION_SIZE) {
-    const usedIds = new Set(sessionCards.map((sc) => sc.content.id))
-    const newSentences = sentenceCards.filter(
-      (c) =>
-        !usedIds.has(c.id) &&
-        !allProgress[makeKey(c.id, "en→zh")] &&
-        !allProgress[makeKey(c.id, "zh→en")],
-    )
-
-    const needed = SESSION_SIZE - sessionCards.length
-    const toAdd = shuffle(newSentences).slice(0, needed)
-
-    for (let i = 0; i < toAdd.length; i++) {
-      const card = toAdd[i]
-      const direction: Direction = i % 2 === 0 ? "en→zh" : "zh→en"
-      sessionCards.push({
-        content: card,
-        progress: createInitialRecord(card.id, direction),
-        gameFormat: pickFormat("sentence", "new"),
-        direction,
-      })
-    }
-  }
-
-  return shuffle(sessionCards).slice(0, SESSION_SIZE)
+  return sessionCards
 }

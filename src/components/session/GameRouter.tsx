@@ -6,6 +6,7 @@ import MultipleChoice from "@/components/games/MultipleChoice"
 import FillInBlank from "@/components/games/FillInBlank"
 import Listening from "@/components/games/Listening"
 import Translation from "@/components/games/Translation"
+import ReadAloud from "@/components/games/ReadAloud"
 import { generateOptions } from "@/lib/games/optionGenerator"
 import type { ContentCard, SessionCard } from "@/types"
 
@@ -13,12 +14,14 @@ interface GameRouterProps {
   card: SessionCard
   allCards: ContentCard[]
   onAnswer: (correct: boolean) => void
+  onNext?: () => void
 }
 
 export default function GameRouter({
   card,
   allCards,
   onAnswer,
+  onNext,
 }: GameRouterProps) {
   const mcOptions = useMemo(() => {
     if (
@@ -39,6 +42,7 @@ export default function GameRouter({
     "fill-in-blank": "填空",
     listening: "聽力",
     translation: "翻譯",
+    "read-aloud": "跟讀",
   }
 
   // Unique key per card so React fully remounts each game component,
@@ -77,6 +81,10 @@ export default function GameRouter({
 
       {card.gameFormat === "translation" && (
         <Translation key={cardKey} card={card} onAnswer={onAnswer} />
+      )}
+
+      {card.gameFormat === "read-aloud" && onNext && (
+        <ReadAloud key={cardKey} card={card} onNext={onNext} />
       )}
     </div>
   )
