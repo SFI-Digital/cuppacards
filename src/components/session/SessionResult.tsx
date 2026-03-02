@@ -16,6 +16,12 @@ interface SessionResultProps {
   onReplayIncorrect: () => void
 }
 
+const TYPE_LABELS: Record<string, string> = {
+  phrase: "片語",
+  vocabulary: "詞彙",
+  sentence: "句子",
+}
+
 export default function SessionResult({
   queue,
   answers,
@@ -48,10 +54,10 @@ export default function SessionResult({
         </p>
         <p className="mt-1 text-lg text-zinc-400">{percentage}%</p>
         <p className="mt-2 text-zinc-500 dark:text-zinc-400">
-          Session complete!
+          練習完成！
         </p>
         {correctCount === total && (
-          <p className="mt-1 text-sm text-emerald-500">Perfect score!</p>
+          <p className="mt-1 text-sm text-emerald-500">滿分！</p>
         )}
       </Card>
 
@@ -59,13 +65,13 @@ export default function SessionResult({
       {byCategory.size > 0 && (
         <Card>
           <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-            By category
+            分類統計
           </h3>
           <div className="space-y-2">
             {Array.from(byCategory.entries()).map(([cat, data]) => (
               <div key={cat} className="flex items-center justify-between">
-                <span className="text-sm capitalize text-zinc-600 dark:text-zinc-400">
-                  {cat}s
+                <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                  {TYPE_LABELS[cat] || cat}
                 </span>
                 <div className="flex items-center gap-2">
                   <div className="h-2 w-24 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
@@ -90,7 +96,7 @@ export default function SessionResult({
       {incorrectAnswers.length > 0 && (
         <Card>
           <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-            Cards to review
+            需要複習的卡片
           </h3>
           <div className="space-y-2">
             {incorrectAnswers.map((a) => {
@@ -123,7 +129,7 @@ export default function SessionResult({
             className="w-full"
             onClick={onReplayIncorrect}
           >
-            Replay incorrect ({incorrectAnswers.length})
+            重練答錯的（{incorrectAnswers.length} 張）
           </Button>
         )}
         <Button
@@ -132,7 +138,7 @@ export default function SessionResult({
           className="w-full"
           onClick={onBackHome}
         >
-          Back to Home
+          返回首頁
         </Button>
       </div>
     </div>

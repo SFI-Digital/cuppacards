@@ -11,6 +11,19 @@ const STATE_COLORS = {
   mastered: { bg: "bg-emerald-200 dark:bg-emerald-900/40", text: "text-emerald-700 dark:text-emerald-300" },
 } as const
 
+const STATE_LABELS: Record<string, string> = {
+  new: "未學習",
+  learning: "學習中",
+  review: "待複習",
+  mastered: "已掌握",
+}
+
+const TYPE_LABELS: Record<string, string> = {
+  phrase: "片語",
+  vocabulary: "詞彙",
+  sentence: "句子",
+}
+
 export default function ProgressPage() {
   const cards = useContentStore((s) => s.cards)
   const stats = useProgressStore((s) => s.stats)
@@ -42,7 +55,6 @@ export default function ProgressPage() {
         { state: "mastered" as const, count: stats.byState.mastered },
         { state: "review" as const, count: stats.byState.review },
         { state: "learning" as const, count: stats.byState.learning },
-        { state: "new" as const, count: stats.byState.new },
       ])
     : []
 
@@ -50,10 +62,10 @@ export default function ProgressPage() {
     <div className="space-y-6 py-4">
       <div>
         <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Progress
+          學習進度
         </h1>
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Your learning statistics
+          你的學習統計資料
         </p>
       </div>
 
@@ -61,16 +73,16 @@ export default function ProgressPage() {
       <Card className="text-center">
         <p className="text-4xl font-bold text-indigo-600">{dayStreak}</p>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          day streak
+          連續天數
         </p>
       </Card>
 
       {/* Cards by state */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Cards by state
+          卡片狀態
         </h3>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           {stateEntries.map(({ state, count }) => (
             <div
               key={state}
@@ -79,8 +91,8 @@ export default function ProgressPage() {
               <p className={`text-2xl font-bold ${STATE_COLORS[state].text}`}>
                 {count}
               </p>
-              <p className={`text-xs capitalize ${STATE_COLORS[state].text}`}>
-                {state}
+              <p className={`text-xs ${STATE_COLORS[state].text}`}>
+                {STATE_LABELS[state]}
               </p>
             </div>
           ))}
@@ -90,7 +102,7 @@ export default function ProgressPage() {
       {/* Mastery bar */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Mastery
+          掌握程度
         </h3>
         <div className="flex h-4 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
           {stateEntries
@@ -108,7 +120,7 @@ export default function ProgressPage() {
                   key={state}
                   className={`${barColors[state]} transition-all`}
                   style={{ width: `${pct}%` }}
-                  title={`${state}: ${count} (${Math.round(pct)}%)`}
+                  title={`${STATE_LABELS[state]}: ${count} (${Math.round(pct)}%)`}
                 />
               )
             })}
@@ -116,19 +128,15 @@ export default function ProgressPage() {
         <div className="mt-2 flex flex-wrap gap-3 text-xs text-zinc-500">
           <span className="flex items-center gap-1">
             <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" />
-            Mastered
+            已掌握
           </span>
           <span className="flex items-center gap-1">
             <span className="inline-block h-2 w-2 rounded-full bg-blue-500" />
-            Review
+            待複習
           </span>
           <span className="flex items-center gap-1">
             <span className="inline-block h-2 w-2 rounded-full bg-amber-500" />
-            Learning
-          </span>
-          <span className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full bg-zinc-400" />
-            New
+            學習中
           </span>
         </div>
       </Card>
@@ -136,7 +144,7 @@ export default function ProgressPage() {
       {/* Overall accuracy */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Accuracy
+          正確率
         </h3>
 
         <div className="mb-4 text-center">
@@ -144,7 +152,7 @@ export default function ProgressPage() {
             {totalReviews > 0 ? Math.round((correctReviews / totalReviews) * 100) : 0}%
           </p>
           <p className="text-xs text-zinc-400">
-            {correctReviews} / {totalReviews} reviews correct
+            {correctReviews} / {totalReviews} 次答對
           </p>
         </div>
 
@@ -155,8 +163,8 @@ export default function ProgressPage() {
               const pct = Math.round((data.correct / data.total) * 100)
               return (
                 <div key={cat} className="flex items-center justify-between">
-                  <span className="text-sm capitalize text-zinc-600 dark:text-zinc-400">
-                    {cat}s
+                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    {TYPE_LABELS[cat] || cat}
                   </span>
                   <div className="flex items-center gap-2">
                     <div className="h-2 w-20 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">

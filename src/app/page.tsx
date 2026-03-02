@@ -34,7 +34,7 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="flex flex-1 items-center justify-center py-20">
-        <p className="text-zinc-500">Loading content...</p>
+        <p className="text-zinc-500">載入內容中...</p>
       </div>
     )
   }
@@ -42,7 +42,7 @@ export default function Home() {
   if (cards.length === 0) {
     return (
       <div className="flex flex-1 items-center justify-center py-20">
-        <p className="text-zinc-500">No content found. Check your CSV files.</p>
+        <p className="text-zinc-500">找不到內容，請檢查 CSV 檔案。</p>
       </div>
     )
   }
@@ -59,7 +59,7 @@ export default function Home() {
           {getGreeting()}
         </h2>
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          Ready to practise?
+          準備好練習了嗎？
         </p>
       </div>
 
@@ -67,18 +67,18 @@ export default function Home() {
       <div className="grid grid-cols-2 gap-3">
         <Card>
           <p className="text-3xl font-bold text-indigo-600">{dueCount}</p>
-          <p className="text-xs text-zinc-500">Cards due</p>
+          <p className="text-xs text-zinc-500">待複習卡片</p>
         </Card>
         <Card>
           <p className="text-3xl font-bold text-amber-500">{dayStreak}</p>
-          <p className="text-xs text-zinc-500">Day streak</p>
+          <p className="text-xs text-zinc-500">連續天數</p>
         </Card>
       </div>
 
       {/* Start session */}
       <div className="space-y-2">
         <Button size="lg" className="w-full" onClick={handleStart}>
-          Start Session (20 cards)
+          開始練習（20 張卡片）
         </Button>
         {sentenceCount > 0 && (
           <Button
@@ -87,7 +87,7 @@ export default function Home() {
             className="w-full"
             onClick={handleSentenceChallenge}
           >
-            Sentence Challenge
+            句子挑戰
           </Button>
         )}
       </div>
@@ -95,37 +95,31 @@ export default function Home() {
       {/* Progress summary */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Progress
+          學習進度
         </h3>
-        <div className="grid grid-cols-4 gap-2 text-center">
-          <div>
-            <p className="text-lg font-bold text-zinc-400">
-              {stats.byState.new}
-            </p>
-            <p className="text-xs text-zinc-400">New</p>
-          </div>
+        <div className="grid grid-cols-3 gap-2 text-center">
           <div>
             <p className="text-lg font-bold text-blue-500">
               {stats.byState.learning}
             </p>
-            <p className="text-xs text-zinc-400">Learning</p>
+            <p className="text-xs text-zinc-400">學習中</p>
           </div>
           <div>
             <p className="text-lg font-bold text-amber-500">
               {stats.byState.review}
             </p>
-            <p className="text-xs text-zinc-400">Review</p>
+            <p className="text-xs text-zinc-400">待複習</p>
           </div>
           <div>
             <p className="text-lg font-bold text-emerald-500">
               {stats.byState.mastered}
             </p>
-            <p className="text-xs text-zinc-400">Mastered</p>
+            <p className="text-xs text-zinc-400">已掌握</p>
           </div>
         </div>
         {stats.accuracy > 0 && (
           <p className="mt-3 text-center text-xs text-zinc-400">
-            {Math.round(stats.accuracy * 100)}% accuracy overall
+            整體正確率 {Math.round(stats.accuracy * 100)}%
           </p>
         )}
       </Card>
@@ -133,7 +127,7 @@ export default function Home() {
       {/* Content packs */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Content
+          內容
         </h3>
         <div className="space-y-2 text-sm">
           {packs.map((pack) => (
@@ -145,14 +139,14 @@ export default function Home() {
                 {pack.name}
               </span>
               <span className="text-xs text-zinc-400">
-                {cards.filter((c) => c.pack === pack.id).length} cards
+                {cards.filter((c) => c.pack === pack.id).length} 張卡片
               </span>
             </div>
           ))}
           <div className="mt-2 flex gap-4 border-t border-zinc-100 pt-2 text-xs text-zinc-400 dark:border-zinc-800">
-            <span>{phraseCount} phrases</span>
-            <span>{vocabCount} vocabulary</span>
-            <span>{sentenceCount} sentences</span>
+            <span>{phraseCount} 個片語</span>
+            <span>{vocabCount} 個詞彙</span>
+            <span>{sentenceCount} 個句子</span>
           </div>
         </div>
       </Card>
@@ -162,7 +156,7 @@ export default function Home() {
 
 function getGreeting(): string {
   const hour = new Date().getHours()
-  if (hour < 12) return "Good morning!"
-  if (hour < 18) return "Good afternoon!"
-  return "Good evening!"
+  if (hour < 12) return "早安！"
+  if (hour < 18) return "午安！"
+  return "晚安！"
 }

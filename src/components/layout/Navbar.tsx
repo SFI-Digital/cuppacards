@@ -10,7 +10,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white/80 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-950/80">
       <div className="mx-auto flex h-14 max-w-md items-center justify-between px-4">
         <h1 className="text-base font-bold text-zinc-900 dark:text-zinc-50">
-          English Learning
+          英語學習
         </h1>
 
         <div className="flex gap-1">
@@ -24,7 +24,7 @@ export default function Navbar() {
                   : "text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
               }`}
             >
-              {a === "en-GB" ? "UK" : "US"}
+              {a === "en-GB" ? "英式" : "美式"}
             </button>
           ))}
         </div>

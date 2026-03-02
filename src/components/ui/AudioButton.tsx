@@ -38,7 +38,7 @@ export default function AudioButton({
       className={`inline-flex items-center gap-1.5 rounded-lg bg-zinc-200 px-3 py-2 text-sm text-zinc-700 transition-colors hover:bg-zinc-300 disabled:opacity-50 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 ${className}`}
     >
       <span>{playing ? "\u23F3" : "\uD83D\uDD0A"}</span>
-      Listen
+      聆聽
     </button>
   )
 }

@@ -34,17 +34,17 @@ export default function SettingsPage() {
     <div className="space-y-6 py-4">
       <div>
         <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Settings
+          設定
         </h1>
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Customise your learning experience
+          自訂你的學習體驗
         </p>
       </div>
 
       {/* Accent */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Accent
+          口音
         </h3>
         <div className="flex gap-2">
           {(["en-GB", "en-US"] as const).map((a) => (
@@ -57,7 +57,7 @@ export default function SettingsPage() {
                   : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
               }`}
             >
-              {a === "en-GB" ? "British" : "American"}
+              {a === "en-GB" ? "英式" : "美式"}
             </button>
           ))}
         </div>
@@ -66,13 +66,13 @@ export default function SettingsPage() {
       {/* Direction */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Quiz direction
+          測驗方向
         </h3>
         <div className="flex gap-2">
           {([
-            { value: "both", label: "Both" },
-            { value: "en→zh", label: "EN → 中" },
-            { value: "zh→en", label: "中 → EN" },
+            { value: "both", label: "雙向" },
+            { value: "en→zh", label: "英 → 中" },
+            { value: "zh→en", label: "中 → 英" },
           ] as const).map((opt) => (
             <button
               key={opt.value}
@@ -92,12 +92,12 @@ export default function SettingsPage() {
       {/* Region */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Region
+          地區
         </h3>
         <div className="flex gap-2">
           {([
-            { value: "HK", label: "Hong Kong" },
-            { value: "TW", label: "Taiwan" },
+            { value: "HK", label: "香港" },
+            { value: "TW", label: "台灣" },
           ] as const).map((opt) => (
             <button
               key={opt.value}
@@ -117,7 +117,7 @@ export default function SettingsPage() {
       {/* Content Packs */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Content packs
+          內容包
         </h3>
         <div className="space-y-2">
           {packs.map((pack) => {
@@ -149,7 +149,7 @@ export default function SettingsPage() {
             )
           })}
           {packs.length === 0 && (
-            <p className="text-sm text-zinc-400">No content packs available</p>
+            <p className="text-sm text-zinc-400">沒有可用的內容包</p>
           )}
         </div>
       </Card>
@@ -157,12 +157,12 @@ export default function SettingsPage() {
       {/* Reset */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          Data
+          資料
         </h3>
         {showResetConfirm ? (
           <div className="space-y-3">
             <p className="text-sm text-red-600 dark:text-red-400">
-              This will delete all your progress. This cannot be undone.
+              這將刪除所有學習進度，此操作無法復原。
             </p>
             <div className="flex gap-2">
               <Button
@@ -171,7 +171,7 @@ export default function SettingsPage() {
                 className="flex-1"
                 onClick={handleReset}
               >
-                Confirm Reset
+                確認重置
               </Button>
               <Button
                 variant="secondary"
@@ -179,7 +179,7 @@ export default function SettingsPage() {
                 className="flex-1"
                 onClick={() => setShowResetConfirm(false)}
               >
-                Cancel
+                取消
               </Button>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function SettingsPage() {
             className="w-full"
             onClick={() => setShowResetConfirm(true)}
           >
-            Reset All Progress
+            重置所有進度
           </Button>
         )}
       </Card>

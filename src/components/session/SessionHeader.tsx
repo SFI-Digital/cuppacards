@@ -15,7 +15,7 @@ export default function SessionHeader({
     <div className="space-y-2">
       <div className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400">
         <span>
-          Card {currentIndex + 1} / {total}
+          第 {currentIndex + 1} / {total} 張
         </span>
         <span className="text-xs">
           {Math.round(((currentIndex + 1) / total) * 100)}%

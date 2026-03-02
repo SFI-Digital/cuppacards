@@ -51,7 +51,7 @@ export default function Translation({ card, onAnswer }: TranslationProps) {
           {question}
         </p>
         <p className="mt-2 text-xs text-zinc-400">
-          Translate to {card.direction === "en→zh" ? "中文" : "English"}
+          翻譯成{card.direction === "en→zh" ? "中文" : "英文"}
         </p>
       </Card>
 
@@ -68,7 +68,7 @@ export default function Translation({ card, onAnswer }: TranslationProps) {
           placeholder={
             card.direction === "en→zh"
               ? "輸入中文翻譯…"
-              : "Type the English translation…"
+              : "輸入英文翻譯…"
           }
           disabled={submitted}
           autoFocus
@@ -85,10 +85,10 @@ export default function Translation({ card, onAnswer }: TranslationProps) {
             }`}
           >
             {result.correct ? (
-              <p className="font-medium">Correct!</p>
+              <p className="font-medium">正確！</p>
             ) : (
               <div>
-                <p className="font-medium">Expected:</p>
+                <p className="font-medium">正確答案：</p>
                 <p>{expected}</p>
               </div>
             )}
@@ -103,7 +103,7 @@ export default function Translation({ card, onAnswer }: TranslationProps) {
             onClick={handleSubmit}
             disabled={input.trim() === ""}
           >
-            Check
+            確認
           </Button>
         )}
       </div>

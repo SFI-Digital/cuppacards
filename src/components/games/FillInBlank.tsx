@@ -51,7 +51,7 @@ export default function FillInBlank({ card, onAnswer }: FillInBlankProps) {
           value={input}
           onChange={(e) => !submitted && setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-          placeholder="Type the missing word…"
+          placeholder="輸入缺少的單字…"
           disabled={submitted}
           autoFocus
           className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"
@@ -66,10 +66,10 @@ export default function FillInBlank({ card, onAnswer }: FillInBlankProps) {
             }`}
           >
             {isCorrect ? (
-              "Correct!"
+              "正確！"
             ) : (
               <>
-                The answer is: <strong>{blank.answer}</strong>
+                正確答案：<strong>{blank.answer}</strong>
               </>
             )}
           </div>
@@ -83,7 +83,7 @@ export default function FillInBlank({ card, onAnswer }: FillInBlankProps) {
             onClick={handleSubmit}
             disabled={input.trim() === ""}
           >
-            Check
+            確認
           </Button>
         )}
       </div>

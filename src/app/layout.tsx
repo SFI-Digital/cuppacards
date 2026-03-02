@@ -16,13 +16,12 @@ const geistMono = Geist_Mono({
 import type { Viewport } from "next"
 
 export const metadata: Metadata = {
-  title: "English Learning",
-  description:
-    "British English learning app for Traditional Chinese speakers",
+  title: "英語學習",
+  description: "專為繁體中文使用者設計的英式英語學習應用程式",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "English Learning",
+    title: "英語學習",
   },
 }
 
@@ -40,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh-TW">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

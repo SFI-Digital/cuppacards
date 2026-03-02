@@ -31,7 +31,15 @@ export default function GameRouter({
   }, [card, allCards])
 
   const directionLabel =
-    card.direction === "en→zh" ? "English → 中文" : "中文 → English"
+    card.direction === "en→zh" ? "英文 → 中文" : "中文 → 英文"
+
+  const FORMAT_LABELS: Record<string, string> = {
+    flashcard: "閃卡",
+    "multiple-choice": "選擇題",
+    "fill-in-blank": "填空",
+    listening: "聽力",
+    translation: "翻譯",
+  }
 
   // Unique key per card so React fully remounts each game component,
   // resetting all internal state (flipped, selected, input, etc.)
@@ -42,7 +50,7 @@ export default function GameRouter({
       <div className="flex items-center justify-between">
         <span className="text-xs text-zinc-400">{directionLabel}</span>
         <span className="rounded bg-zinc-200 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-          {card.gameFormat}
+          {FORMAT_LABELS[card.gameFormat] || card.gameFormat}
         </span>
       </div>
 

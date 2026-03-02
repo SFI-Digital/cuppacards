@@ -29,20 +29,20 @@ export default function ReviewPage() {
     <div className="space-y-6 py-4">
       <div>
         <h1 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Review
+          複習
         </h1>
         <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-          Cards you&apos;re currently learning
+          目前正在學習的卡片
         </p>
       </div>
 
       {learningRecords.length === 0 ? (
         <Card className="text-center">
           <p className="text-zinc-500 dark:text-zinc-400">
-            No cards in learning state yet.
+            目前還沒有學習中的卡片。
           </p>
           <p className="mt-1 text-sm text-zinc-400">
-            Start a session to begin learning new cards!
+            開始練習來學習新卡片吧！
           </p>
         </Card>
       ) : (
@@ -53,13 +53,12 @@ export default function ReviewPage() {
             className="w-full"
             onClick={handleStart}
           >
-            Start Review Session ({learningRecords.length} card
-            {learningRecords.length !== 1 ? "s" : ""})
+            開始複習（{learningRecords.length} 張卡片）
           </Button>
 
           <Card>
             <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-              Learning cards
+              學習中的卡片
             </h3>
             <div className="space-y-2">
               {learningRecords.map((record) => {
@@ -80,10 +79,10 @@ export default function ReviewPage() {
                     </div>
                     <div className="ml-3 text-right">
                       <span className="text-xs text-zinc-400">
-                        {record.direction === "en→zh" ? "EN→中" : "中→EN"}
+                        {record.direction === "en→zh" ? "英→中" : "中→英"}
                       </span>
                       <p className="text-xs text-zinc-400">
-                        Due: {record.dueDate}
+                        到期：{record.dueDate}
                       </p>
                     </div>
                   </div>

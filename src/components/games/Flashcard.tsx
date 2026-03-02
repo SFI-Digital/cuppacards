@@ -64,14 +64,14 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
 
             {card.content.supplement.example && (
               <p className="mt-1 text-sm text-zinc-400">
-                e.g. {card.content.supplement.example}
+                例：{card.content.supplement.example}
               </p>
             )}
 
             {vocabMatches.length > 0 && (
               <div className="mt-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">
                 <p className="mb-1 text-xs font-medium text-indigo-400">
-                  Vocabulary
+                  相關詞彙
                 </p>
                 {vocabMatches.map((m) => (
                   <div key={m.word} className="mt-1 text-xs text-zinc-400">
@@ -91,7 +91,7 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
             )}
           </div>
         ) : (
-          <p className="mt-3 text-xs text-zinc-400">Tap to reveal</p>
+          <p className="mt-3 text-xs text-zinc-400">點擊顯示答案</p>
         )}
       </Card>
 
@@ -105,7 +105,7 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
             className="flex-1"
             onClick={() => onAnswer(false)}
           >
-            Missed it
+            不會
           </Button>
           <Button
             variant="primary"
@@ -113,7 +113,7 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
             className="flex-1"
             onClick={() => onAnswer(true)}
           >
-            Got it
+            記住了
           </Button>
         </div>
       )}

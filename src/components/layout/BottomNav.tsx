@@ -10,11 +10,11 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { href: "/", label: "Home", icon: "\uD83C\uDFE0" },
-  { href: "/session", label: "Session", icon: "\uD83C\uDCCF" },
-  { href: "/review", label: "Review", icon: "\uD83D\uDCD6" },
-  { href: "/progress", label: "Progress", icon: "\uD83D\uDCCA" },
-  { href: "/settings", label: "Settings", icon: "\u2699\uFE0F" },
+  { href: "/", label: "\u9996\u9801", icon: "\uD83C\uDFE0" },
+  { href: "/session", label: "\u7DF4\u7FD2", icon: "\uD83C\uDCCF" },
+  { href: "/review", label: "\u8907\u7FD2", icon: "\uD83D\uDCD6" },
+  { href: "/progress", label: "\u9032\u5EA6", icon: "\uD83D\uDCCA" },
+  { href: "/settings", label: "\u8A2D\u5B9A", icon: "\u2699\uFE0F" },
 ]
 
 export default function BottomNav() {
