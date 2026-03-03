@@ -7,19 +7,16 @@ const STORAGE_KEY = "settings"
 interface Settings {
   accent: Accent
   enabledPacks: string[]
-  region: "HK" | "TW"
 }
 
 interface SettingsStore extends Settings {
   setAccent: (accent: Accent) => void
   togglePack: (packId: string) => void
-  setRegion: (region: "HK" | "TW") => void
 }
 
 const DEFAULTS: Settings = {
   accent: "en-GB",
   enabledPacks: ["core"],
-  region: "HK",
 }
 
 function loadSettings(): Settings {
@@ -36,8 +33,8 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
 
   setAccent: (accent) => {
     set({ accent })
-    const { enabledPacks, region } = get()
-    persist({ accent, enabledPacks, region })
+    const { enabledPacks } = get()
+    persist({ accent, enabledPacks })
   },
 
   togglePack: (packId) => {
@@ -46,13 +43,7 @@ export const useSettingsStore = create<SettingsStore>((set, get) => ({
       ? enabledPacks.filter((id) => id !== packId)
       : [...enabledPacks, packId]
     set({ enabledPacks: next })
-    const { accent, region } = get()
-    persist({ accent, enabledPacks: next, region })
-  },
-
-  setRegion: (region) => {
-    set({ region })
-    const { accent, enabledPacks } = get()
-    persist({ accent, enabledPacks, region })
+    const { accent } = get()
+    persist({ accent, enabledPacks: next })
   },
 }))

@@ -9,10 +9,8 @@ import Button from "@/components/ui/Button"
 
 export default function SettingsPage() {
   const accent = useSettingsStore((s) => s.accent)
-  const region = useSettingsStore((s) => s.region)
   const enabledPacks = useSettingsStore((s) => s.enabledPacks)
   const setAccent = useSettingsStore((s) => s.setAccent)
-  const setRegion = useSettingsStore((s) => s.setRegion)
   const togglePack = useSettingsStore((s) => s.togglePack)
 
   const resetProgress = useProgressStore((s) => s.resetProgress)
@@ -56,31 +54,6 @@ export default function SettingsPage() {
               }`}
             >
               {a === "en-GB" ? "英式" : "美式"}
-            </button>
-          ))}
-        </div>
-      </Card>
-
-      {/* Region */}
-      <Card>
-        <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          地區
-        </h3>
-        <div className="flex gap-2">
-          {([
-            { value: "HK", label: "香港" },
-            { value: "TW", label: "台灣" },
-          ] as const).map((opt) => (
-            <button
-              key={opt.value}
-              onClick={() => setRegion(opt.value)}
-              className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                region === opt.value
-                  ? "bg-indigo-600 text-white"
-                  : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-              }`}
-            >
-              {opt.label}
             </button>
           ))}
         </div>

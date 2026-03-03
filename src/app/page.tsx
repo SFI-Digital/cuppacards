@@ -87,7 +87,7 @@ export default function Home() {
             className="w-full"
             onClick={handleSentencePractice}
           >
-            句子練習
+            句子跟讀練習
           </Button>
         )}
       </div>
