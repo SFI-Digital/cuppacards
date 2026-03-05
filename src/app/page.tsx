@@ -15,15 +15,31 @@ export default function Home() {
   const hasSentences = useContentStore((s) => s.cards.some((c) => c.type === "sentence"))
   const isLoading = useContentStore((s) => s.isLoading)
   const startSession = useSessionStore((s) => s.startSession)
+  const startReviewSession = useSessionStore((s) => s.startReviewSession)
   const startSentencePractice = useSessionStore((s) => s.startSentencePractice)
   const progressData = useProgressStore((s) => s.progress)
   const enabledLevels = useSettingsStore((s) => s.enabledLevels)
 
   const { stats, dayStreak, dueCount } = useProgress()
 
+  const srsCardIds = new Set(
+    cards.filter((c) => c.type !== "sentence").map((c) => c.id),
+  )
+  const reviewCount = Object.values(progressData).filter(
+    (r) =>
+      (r.state === "learning" || r.state === "review" || r.state === "mastered") &&
+      srsCardIds.has(r.cardId),
+  ).length
+
   const handleStart = () => {
     if (cards.length === 0) return
     startSession(cards, progressData, enabledLevels)
+    router.push("/session")
+  }
+
+  const handleReview = () => {
+    if (reviewCount === 0) return
+    startReviewSession(cards, progressData)
     router.push("/session")
   }
 
@@ -78,6 +94,16 @@ export default function Home() {
         <Button size="lg" className="w-full" onClick={handleStart}>
           開始練習（20 張卡片）
         </Button>
+        {reviewCount > 0 && (
+          <Button
+            variant="secondary"
+            size="md"
+            className="w-full"
+            onClick={handleReview}
+          >
+            複習（{reviewCount} 張卡片）
+          </Button>
+        )}
         {hasSentences && (
           <Button
             variant="secondary"

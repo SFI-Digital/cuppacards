@@ -35,16 +35,17 @@ function pickVoice(
   voices: SpeechSynthesisVoice[],
   accent: Accent,
 ): SpeechSynthesisVoice | undefined {
-  // Exact match first (e.g. en-GB)
-  const exact = voices.find((v) => v.lang === accent)
-  if (exact) return exact
+  // Collect all matching voices, then pick one at random
+  const exact = voices.filter((v) => v.lang === accent)
+  if (exact.length > 0) return exact[Math.floor(Math.random() * exact.length)]
 
-  // Prefix match (e.g. en-GB-*)
-  const prefix = voices.find((v) => v.lang.startsWith(accent))
-  if (prefix) return prefix
+  const prefix = voices.filter((v) => v.lang.startsWith(accent))
+  if (prefix.length > 0) return prefix[Math.floor(Math.random() * prefix.length)]
 
-  // Any English voice as fallback
-  return voices.find((v) => v.lang.startsWith("en"))
+  const any = voices.filter((v) => v.lang.startsWith("en"))
+  if (any.length > 0) return any[Math.floor(Math.random() * any.length)]
+
+  return undefined
 }
 
 export function isSupported(): boolean {
