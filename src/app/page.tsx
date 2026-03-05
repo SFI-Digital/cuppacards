@@ -25,9 +25,11 @@ export default function Home() {
   const srsCardIds = new Set(
     cards.filter((c) => c.type !== "sentence").map((c) => c.id),
   )
+  const today = new Date().toISOString().split("T")[0]
   const reviewCount = Object.values(progressData).filter(
     (r) =>
       (r.state === "learning" || r.state === "review" || r.state === "mastered") &&
+      r.dueDate <= today &&
       srsCardIds.has(r.cardId),
   ).length
 
@@ -94,21 +96,25 @@ export default function Home() {
         <Button size="lg" className="w-full" onClick={handleStart}>
           開始練習（20 張卡片）
         </Button>
-        {reviewCount > 0 && (
-          <Button
-            variant="secondary"
-            size="md"
-            className="w-full"
-            onClick={handleReview}
-          >
-            複習（{reviewCount} 張卡片）
-          </Button>
-        )}
+        <Button
+          variant="ghost"
+          size="md"
+          className={`w-full ${
+            reviewCount > 0
+              ? "bg-amber-500 text-white hover:bg-amber-600 active:bg-amber-700"
+              : "bg-amber-500/40 text-white/70 cursor-not-allowed"
+          }`}
+          onClick={handleReview}
+          disabled={reviewCount === 0}
+        >
+          {reviewCount > 0
+            ? `複習（${reviewCount} 張卡片）`
+            : "沒有待複習的卡片"}
+        </Button>
         {hasSentences && (
           <Button
-            variant="secondary"
             size="md"
-            className="w-full"
+            className="w-full bg-teal-600 text-white hover:bg-teal-700 active:bg-teal-800"
             onClick={handleSentencePractice}
           >
             句子跟讀練習

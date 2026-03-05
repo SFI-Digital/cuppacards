@@ -134,10 +134,13 @@ export function buildReviewSession(
     allCards.filter((c) => c.type !== "sentence").map((c) => [c.id, c]),
   )
 
+  const today = todayISO()
+
   const reviewRecords = Object.values(allProgress)
     .filter(
       (r) =>
         (r.state === "learning" || r.state === "review" || r.state === "mastered") &&
+        r.dueDate <= today &&
         cardMap.has(r.cardId),
     )
     .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
