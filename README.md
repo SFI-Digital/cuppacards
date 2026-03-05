@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CuppaCards
+
+A flashcard-based English learning app for Traditional Chinese speakers, with a focus on British English slang, understatement, and cultural nuance.
+
+Built with Next.js 16, React 19, TypeScript, Tailwind CSS 4, and Zustand. Installable as a PWA.
+
+## Features
+
+- **Spaced repetition (SM-2)** with 4 card states: new, learning, review, mastered
+- **8 game formats**: flashcard, multiple choice, fill-in-blank, listening, translation, true/false, read-aloud, understatement
+- **British English content pack**: slang, understatement, vocabulary swaps, cultural references
+- **TTS pronunciation** with en-GB / en-US accent toggle and curated voice allowlist
+- **Difficulty filtering**: toggle easy / intermediate levels
+- **Day streak tracking** and progress statistics
+- **Offline-ready PWA** with service worker
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm build
+pnpm start
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+  app/           Pages (home, session, progress, settings)
+  components/    UI components, game components, layout
+  stores/        Zustand state (session, content, progress, settings)
+  lib/           Business logic (SRS, content loading, TTS, game utilities)
+  hooks/         Custom React hooks
+  types/         TypeScript interfaces
+public/
+  content/       CSV content packs (core + british-english)
+  icons/         PWA icons
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+See [doc/project.md](../doc/project.md) for the full project document.
