@@ -16,12 +16,12 @@ const geistMono = Geist_Mono({
 import type { Viewport } from "next"
 
 export const metadata: Metadata = {
-  title: "英語學習",
-  description: "專為繁體中文使用者設計的英式英語學習應用程式",
+  title: "CuppaCards",
+  description: "CuppaCards — 專為繁體中文使用者設計的英式英語學習應用程式",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "英語學習",
+    title: "CuppaCards",
   },
 }
 

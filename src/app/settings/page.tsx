@@ -111,7 +111,7 @@ export default function SettingsPage() {
       {/* Difficulty Levels */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          難度
+          通用英文難度
         </h3>
         <div className="flex gap-2">
           {(
