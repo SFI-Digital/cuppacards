@@ -7,6 +7,8 @@ import FillInBlank from "@/components/games/FillInBlank"
 import Listening from "@/components/games/Listening"
 import Translation from "@/components/games/Translation"
 import ReadAloud from "@/components/games/ReadAloud"
+import TrueFalse from "@/components/games/TrueFalse"
+import Understatement from "@/components/games/Understatement"
 import { generateOptions } from "@/lib/games/optionGenerator"
 import type { ContentCard, SessionCard } from "@/types"
 
@@ -33,17 +35,7 @@ export default function GameRouter({
     return []
   }, [card, allCards])
 
-  const directionLabel =
-    card.direction === "en→zh" ? "英文 → 中文" : "中文 → 英文"
-
-  const FORMAT_LABELS: Record<string, string> = {
-    flashcard: "閃卡",
-    "multiple-choice": "選擇題",
-    "fill-in-blank": "填空",
-    listening: "聽力",
-    translation: "翻譯",
-    "read-aloud": "跟讀",
-  }
+  const isNew = card.progress.state === "new"
 
   // Unique key per card so React fully remounts each game component,
   // resetting all internal state (flipped, selected, input, etc.)
@@ -51,10 +43,15 @@ export default function GameRouter({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <span className="text-xs text-zinc-400">{directionLabel}</span>
-        <span className="rounded bg-zinc-200 px-2 py-0.5 text-xs text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-          {FORMAT_LABELS[card.gameFormat] || card.gameFormat}
+      <div className="flex items-center justify-end">
+        <span
+          className={`rounded px-2 py-0.5 text-xs font-medium ${
+            isNew
+              ? "bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400"
+              : "bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
+          }`}
+        >
+          {isNew ? "新卡片" : "複習"}
         </span>
       </div>
 
@@ -81,6 +78,14 @@ export default function GameRouter({
 
       {card.gameFormat === "translation" && (
         <Translation key={cardKey} card={card} onAnswer={onAnswer} />
+      )}
+
+      {card.gameFormat === "true-false" && (
+        <TrueFalse key={cardKey} card={card} allCards={allCards} onAnswer={onAnswer} />
+      )}
+
+      {card.gameFormat === "understatement" && (
+        <Understatement key={cardKey} card={card} allCards={allCards} onAnswer={onAnswer} />
       )}
 
       {card.gameFormat === "read-aloud" && onNext && (

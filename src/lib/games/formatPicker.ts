@@ -3,15 +3,21 @@ import type { GameFormat, CardState, ContentCard } from "@/types"
 const FORMAT_RULES: Record<string, GameFormat[]> = {
   // Phrases
   "phrase::new": ["flashcard"],
-  "phrase::learning": ["flashcard", "multiple-choice", "listening"],
-  "phrase::review": ["flashcard", "multiple-choice", "listening", "fill-in-blank", "translation"],
+  "phrase::learning": ["multiple-choice", "listening", "true-false"],
+  "phrase::review": ["multiple-choice", "listening", "fill-in-blank"],
   "phrase::mastered": ["multiple-choice", "translation", "fill-in-blank"],
+
+  // Understatement
+  "understatement::new": ["flashcard"],
+  "understatement::learning": ["understatement"],
+  "understatement::review": ["understatement"],
+  "understatement::mastered": ["understatement"],
 
   // Vocabulary
   "vocabulary::new": ["flashcard"],
-  "vocabulary::learning": ["flashcard", "multiple-choice"],
-  "vocabulary::review": ["flashcard", "multiple-choice", "translation"],
-  "vocabulary::mastered": ["multiple-choice", "translation"],
+  "vocabulary::learning": ["multiple-choice", "listening", "true-false"],
+  "vocabulary::review": ["multiple-choice", "listening", "translation"],
+  "vocabulary::mastered": ["multiple-choice", "listening", "translation"],
 }
 
 export function pickFormat(

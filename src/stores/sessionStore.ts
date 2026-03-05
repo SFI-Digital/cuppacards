@@ -13,7 +13,7 @@ interface SessionStore {
   currentIndex: number
   answers: AnswerResult[]
   isActive: boolean
-  startSession: (cards: ContentCard[], progress: Record<string, ProgressRecord>) => void
+  startSession: (cards: ContentCard[], progress: Record<string, ProgressRecord>, enabledLevels?: string[]) => void
   startReviewSession: (cards: ContentCard[], progress: Record<string, ProgressRecord>) => void
   startSentencePractice: (cards: ContentCard[]) => void
   answerCurrent: (correct: boolean) => void
@@ -30,8 +30,8 @@ export const useSessionStore = create<SessionStore>((set, get) => ({
   answers: [],
   isActive: false,
 
-  startSession: (cards, progress) => {
-    const queue = buildSession(cards, progress)
+  startSession: (cards, progress, enabledLevels) => {
+    const queue = buildSession(cards, progress, enabledLevels)
     set({
       queue,
       currentIndex: 0,

@@ -2,7 +2,7 @@
 
 export interface ContentCard {
   id: string // e.g. "phrase_part1_042"
-  type: "phrase" | "vocabulary" | "sentence"
+  type: "phrase" | "vocabulary" | "sentence" | "understatement"
   category: string // e.g. "Greetings", "Daily Life"
   pack: string // e.g. "core", "british-english"
 
@@ -21,9 +21,12 @@ export interface ContentCard {
     example?: string // Example sentence (vocabulary only)
     definition?: string // Definition (vocabulary only)
     partOfSpeech?: string // noun, verb, etc. (vocabulary only)
+    meant?: string // What they actually meant (understatement only)
+    meantZh?: string // Chinese translation of what they meant (understatement only)
   }
 
   variant?: "US" | "UK" | "both" // for vocabulary swap cards
+  difficulty?: string // e.g. "easy", "intermediate", "advanced"
 }
 
 // ─── Progress Types ──────────────────────────────────────────────
@@ -58,6 +61,8 @@ export type GameFormat =
   | "listening"
   | "translation"
   | "read-aloud"
+  | "true-false"
+  | "understatement"
 
 export interface SessionCard {
   content: ContentCard

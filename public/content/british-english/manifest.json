@@ -1,0 +1,16 @@
+{
+  "id": "british-english",
+  "name": "英式英文",
+  "description": "俚語、潛台詞、英美詞彙對照、文化知識",
+  "type": "cultural",
+  "dialect": "en-GB",
+  "translation": "zh-TW",
+  "version": 1,
+  "files": [
+    "brit_slang.csv",
+    "brit_understatement.csv",
+    "brit_vocabulary_swaps.csv",
+    "brit_cultural.csv"
+  ],
+  "premium": false
+}

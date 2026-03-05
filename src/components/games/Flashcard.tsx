@@ -50,6 +50,22 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
               {answer}
             </p>
 
+            {card.content.supplement.meant && (
+              <div className="mt-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+                <p className="mb-1 text-xs font-medium text-amber-500">
+                  實際意思
+                </p>
+                <p className="text-sm text-zinc-700 dark:text-zinc-300">
+                  {card.content.supplement.meant}
+                </p>
+                {card.content.supplement.meantZh && (
+                  <p className="mt-1 text-sm text-zinc-500">
+                    {card.content.supplement.meantZh}
+                  </p>
+                )}
+              </div>
+            )}
+
             {card.content.supplement.note && (
               <p className="mt-2 text-sm italic text-zinc-400">
                 {card.content.supplement.note}

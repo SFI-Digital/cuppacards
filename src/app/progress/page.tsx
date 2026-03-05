@@ -2,6 +2,7 @@
 
 import { useContentStore } from "@/stores/contentStore"
 import { useProgressStore } from "@/stores/progressStore"
+import { useProgress } from "@/hooks/useProgress"
 import Card from "@/components/ui/Card"
 
 const STATE_COLORS = {
@@ -26,8 +27,7 @@ const TYPE_LABELS: Record<string, string> = {
 
 export default function ProgressPage() {
   const cards = useContentStore((s) => s.cards)
-  const stats = useProgressStore((s) => s.stats)
-  const dayStreak = useProgressStore((s) => s.dayStreak)
+  const { stats, dayStreak } = useProgress()
   const progress = useProgressStore((s) => s.progress)
 
   // Exclude sentences from stats — they use read-aloud, not SRS

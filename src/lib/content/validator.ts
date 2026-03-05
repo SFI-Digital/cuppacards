@@ -22,7 +22,7 @@ export function validateCards(cards: ContentCard[]): ValidationResult {
     if (!card.id) reasons.push("missing id")
     if (!card.front.text) reasons.push("missing front text")
     if (!card.back.text) reasons.push("missing back text")
-    if (!["phrase", "vocabulary", "sentence"].includes(card.type)) {
+    if (!["phrase", "vocabulary", "sentence", "understatement"].includes(card.type)) {
       reasons.push(`invalid type: ${card.type}`)
     }
 

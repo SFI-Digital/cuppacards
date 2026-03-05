@@ -22,6 +22,18 @@ function makeKey(cardId: string, direction: Direction): string {
 }
 
 /**
+ * Check if a card passes the difficulty filter.
+ * Cards without a difficulty field (brit pack, sentences) always pass.
+ */
+function matchesDifficulty(
+  card: ContentCard,
+  enabledLevels: string[],
+): boolean {
+  if (!card.difficulty) return true
+  return enabledLevels.includes(card.difficulty)
+}
+
+/**
  * Pick direction based on card state:
  * - new/learning → always en→zh (see English, recall Chinese)
  * - review/mastered → randomly en→zh or zh→en
@@ -34,17 +46,22 @@ function pickDirection(state: ProgressRecord["state"]): Direction {
 export function buildSession(
   allCards: ContentCard[],
   allProgress: Record<string, ProgressRecord>,
+  enabledLevels: string[] = ["intermediate"],
 ): SessionCard[] {
   const today = todayISO()
 
   // Only phrases and vocabulary — sentences are separate
   const eligibleCards = allCards.filter((c) => c.type !== "sentence")
 
-  // 1. Find due cards (exclude sentences)
+  // 1. Find due cards (learning + review only, not mastered)
   const cardMap = new Map(eligibleCards.map((c) => [c.id, c]))
   const dueRecords = Object.values(allProgress).filter((r) => {
     const card = cardMap.get(r.cardId)
-    return card && r.state !== "new" && r.dueDate <= today
+    return (
+      card &&
+      (r.state === "learning" || r.state === "review") &&
+      r.dueDate <= today
+    )
   })
 
   // 2. Build SessionCards from due records
@@ -66,6 +83,7 @@ export function buildSession(
   }
 
   // 3. Top up with new cards if needed (phrases first, then vocabulary)
+  //    Only introduce new cards that match the enabled difficulty levels
   if (sessionCards.length < SESSION_SIZE) {
     const usedCardIds = new Set(sessionCards.map((sc) => sc.content.id))
     const typePriority: ContentCard["type"][] = ["phrase", "vocabulary"]
@@ -76,6 +94,7 @@ export function buildSession(
         (c) =>
           c.type === type &&
           !usedCardIds.has(c.id) &&
+          matchesDifficulty(c, enabledLevels) &&
           !allProgress[makeKey(c.id, "en→zh")] &&
           !allProgress[makeKey(c.id, "zh→en")],
       )
@@ -104,8 +123,8 @@ export function buildSession(
 }
 
 /**
- * Build a review session containing only "learning" state cards.
- * Excludes sentences.
+ * Build a review session containing learning, review, and mastered cards.
+ * Excludes sentences and new cards.
  */
 export function buildReviewSession(
   allCards: ContentCard[],
@@ -115,13 +134,17 @@ export function buildReviewSession(
     allCards.filter((c) => c.type !== "sentence").map((c) => [c.id, c]),
   )
 
-  const learningRecords = Object.values(allProgress)
-    .filter((r) => r.state === "learning" && cardMap.has(r.cardId))
+  const reviewRecords = Object.values(allProgress)
+    .filter(
+      (r) =>
+        (r.state === "learning" || r.state === "review" || r.state === "mastered") &&
+        cardMap.has(r.cardId),
+    )
     .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
 
   const sessionCards: SessionCard[] = []
 
-  for (const record of learningRecords) {
+  for (const record of reviewRecords) {
     const content = cardMap.get(record.cardId)
     if (!content) continue
 
@@ -129,7 +152,7 @@ export function buildReviewSession(
       content,
       progress: record,
       gameFormat: pickFormat(content.type, record.state),
-      direction: "en→zh", // learning cards always en→zh
+      direction: pickDirection(record.state),
     })
   }
 

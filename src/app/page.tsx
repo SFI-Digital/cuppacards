@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation"
 import { useContentStore } from "@/stores/contentStore"
 import { useSessionStore } from "@/stores/sessionStore"
 import { useProgressStore } from "@/stores/progressStore"
+import { useSettingsStore } from "@/stores/settingsStore"
 import { useProgress } from "@/hooks/useProgress"
 import Button from "@/components/ui/Button"
 import Card from "@/components/ui/Card"
@@ -11,17 +12,18 @@ import Card from "@/components/ui/Card"
 export default function Home() {
   const router = useRouter()
   const cards = useContentStore((s) => s.cards)
-  const packs = useContentStore((s) => s.packs)
+  const hasSentences = useContentStore((s) => s.cards.some((c) => c.type === "sentence"))
   const isLoading = useContentStore((s) => s.isLoading)
   const startSession = useSessionStore((s) => s.startSession)
   const startSentencePractice = useSessionStore((s) => s.startSentencePractice)
   const progressData = useProgressStore((s) => s.progress)
+  const enabledLevels = useSettingsStore((s) => s.enabledLevels)
 
   const { stats, dayStreak, dueCount } = useProgress()
 
   const handleStart = () => {
     if (cards.length === 0) return
-    startSession(cards, progressData)
+    startSession(cards, progressData, enabledLevels)
     router.push("/session")
   }
 
@@ -46,10 +48,6 @@ export default function Home() {
       </div>
     )
   }
-
-  const phraseCount = cards.filter((c) => c.type === "phrase").length
-  const vocabCount = cards.filter((c) => c.type === "vocabulary").length
-  const sentenceCount = cards.filter((c) => c.type === "sentence").length
 
   return (
     <div className="space-y-6">
@@ -80,7 +78,7 @@ export default function Home() {
         <Button size="lg" className="w-full" onClick={handleStart}>
           開始練習（20 張卡片）
         </Button>
-        {sentenceCount > 0 && (
+        {hasSentences && (
           <Button
             variant="secondary"
             size="md"
@@ -122,33 +120,6 @@ export default function Home() {
             整體正確率 {Math.round(stats.accuracy * 100)}%
           </p>
         )}
-      </Card>
-
-      {/* Content packs */}
-      <Card>
-        <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
-          內容
-        </h3>
-        <div className="space-y-2 text-sm">
-          {packs.map((pack) => (
-            <div
-              key={pack.id}
-              className="flex items-center justify-between"
-            >
-              <span className="text-zinc-700 dark:text-zinc-300">
-                {pack.name}
-              </span>
-              <span className="text-xs text-zinc-400">
-                {cards.filter((c) => c.pack === pack.id).length} 張卡片
-              </span>
-            </div>
-          ))}
-          <div className="mt-2 flex gap-4 border-t border-zinc-100 pt-2 text-xs text-zinc-400 dark:border-zinc-800">
-            <span>{phraseCount} 個片語</span>
-            <span>{vocabCount} 個詞彙</span>
-            <span>{sentenceCount} 個句子</span>
-          </div>
-        </div>
       </Card>
     </div>
   )

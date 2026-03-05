@@ -10,7 +10,13 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const isLoading = useContentStore((s) => s.isLoading)
   const cards = useContentStore((s) => s.cards)
   const enabledPacks = useSettingsStore((s) => s.enabledPacks)
+  const hydrateSettings = useSettingsStore((s) => s.hydrate)
   const loadProgress = useProgressStore((s) => s.loadProgress)
+
+  // Hydrate settings from localStorage before anything else
+  useEffect(() => {
+    hydrateSettings()
+  }, [hydrateSettings])
 
   // Load content on mount
   useEffect(() => {

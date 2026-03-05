@@ -20,16 +20,9 @@ export default function Translation({ card, onAnswer }: TranslationProps) {
     similarity: number
   } | null>(null)
 
-  // Show source language, user types the target language
-  const question =
-    card.direction === "en→zh"
-      ? card.content.front.text
-      : card.content.back.text
-
-  const expected =
-    card.direction === "en→zh"
-      ? card.content.back.text
-      : card.content.front.text
+  // Always show Chinese, user types English
+  const question = card.content.back.text
+  const expected = card.content.front.text
 
   const handleSubmit = () => {
     if (submitted || input.trim() === "") return
@@ -51,7 +44,7 @@ export default function Translation({ card, onAnswer }: TranslationProps) {
           {question}
         </p>
         <p className="mt-2 text-xs text-zinc-400">
-          翻譯成{card.direction === "en→zh" ? "中文" : "英文"}
+          翻譯成英文
         </p>
       </Card>
 
@@ -65,11 +58,7 @@ export default function Translation({ card, onAnswer }: TranslationProps) {
               handleSubmit()
             }
           }}
-          placeholder={
-            card.direction === "en→zh"
-              ? "輸入中文翻譯…"
-              : "輸入英文翻譯…"
-          }
+          placeholder="輸入英文翻譯…"
           disabled={submitted}
           autoFocus
           rows={2}
