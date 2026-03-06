@@ -111,7 +111,7 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
         )}
       </Card>
 
-      <AudioButton text={card.content.front.text} />
+      <AudioButton text={card.content.front.text} className="w-full justify-center" />
 
       {flipped && (
         <div className="flex gap-3">
