@@ -1,10 +1,9 @@
-const CACHE_NAME = "eng-learn-v2"
+const CACHE_NAME = "cuppa-v1773060263612"
 
 const PRECACHE_URLS = [
   "/",
   "/session",
   "/session/result",
-  "/review",
   "/progress",
   "/settings",
   "/content/core/manifest.json",
@@ -43,6 +42,13 @@ self.addEventListener("activate", (event) => {
       )
       .then(() => self.clients.claim())
   )
+})
+
+// Listen for skip-waiting message from client
+self.addEventListener("message", (event) => {
+  if (event.data === "SKIP_WAITING") {
+    self.skipWaiting()
+  }
 })
 
 // Fetch — network first with cache fallback for everything

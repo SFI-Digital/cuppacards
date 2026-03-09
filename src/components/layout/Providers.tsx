@@ -30,13 +30,38 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     loadProgress()
   }, [loadProgress])
 
-  // Register service worker for PWA
+  // Register service worker for PWA + handle updates
   useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch((err) => {
-        console.warn("[PWA] Service worker registration failed:", err)
+    if (!("serviceWorker" in navigator)) return
+
+    navigator.serviceWorker.register("/sw.js").then((reg) => {
+      // Check for waiting worker on load
+      if (reg.waiting) {
+        reg.waiting.postMessage("SKIP_WAITING")
+      }
+
+      // Listen for new updates
+      reg.addEventListener("updatefound", () => {
+        const newWorker = reg.installing
+        if (!newWorker) return
+
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            newWorker.postMessage("SKIP_WAITING")
+          }
+        })
       })
-    }
+    }).catch((err) => {
+      console.warn("[PWA] Service worker registration failed:", err)
+    })
+
+    // Reload when new SW takes control
+    let refreshing = false
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (refreshing) return
+      refreshing = true
+      window.location.reload()
+    })
   }, [])
 
   return <>{children}</>
