@@ -143,6 +143,45 @@ export default function SettingsPage() {
         </p>
       </Card>
 
+      {/* About */}
+      <Card>
+        <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+          關於
+        </h3>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3">
+            <div>
+              <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">CuppaCards</p>
+              <p className="text-xs text-zinc-400">by SFI Digital LTD</p>
+            </div>
+          </div>
+          <p className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+            We build focused digital products and operational systems — purpose-built software that replaces manual workflows for small businesses.
+          </p>
+          <div className="space-y-1.5 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+            <a
+              href="https://sfi-digital.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between text-xs text-indigo-500 hover:text-indigo-600 dark:text-indigo-400"
+            >
+              <span>sfi-digital.com</span>
+              <span>↗</span>
+            </a>
+            <a
+              href="mailto:hello@sfi-digital.com"
+              className="flex items-center justify-between text-xs text-zinc-500 hover:text-zinc-700 dark:text-zinc-400"
+            >
+              <span>hello@sfi-digital.com</span>
+              <span>↗</span>
+            </a>
+          </div>
+          <p className="text-xs text-zinc-300 dark:text-zinc-600">
+            Registered in England and Wales · Co. No. 16926124
+          </p>
+        </div>
+      </Card>
+
       {/* Reset */}
       <Card>
         <h3 className="mb-3 text-sm font-semibold text-zinc-700 dark:text-zinc-300">
