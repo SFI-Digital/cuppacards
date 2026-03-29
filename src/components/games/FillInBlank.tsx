@@ -18,8 +18,10 @@ export default function FillInBlank({ card, onAnswer }: FillInBlankProps) {
 
   const blank = useMemo(() => generateBlank(card.content), [card.content])
 
-  const isCorrect =
-    input.trim().toLowerCase() === blank.answer.toLowerCase()
+  // Support multiple acceptable answers separated by "/" (e.g. "Tube/Underground")
+  const isCorrect = blank.answer
+    .split("/")
+    .some((v) => input.trim().toLowerCase() === v.trim().toLowerCase())
 
   const handleSubmit = () => {
     if (submitted || input.trim() === "") return

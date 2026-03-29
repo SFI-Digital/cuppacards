@@ -1,6 +1,7 @@
 /**
  * Score a user-typed translation against the expected answer.
  * Case-insensitive, trims whitespace, normalises punctuation.
+ * If `expected` contains "/" (e.g. "Tube/Underground"), any variant is accepted.
  */
 export function scoreTranslation(
   userAnswer: string,
@@ -14,22 +15,28 @@ export function scoreTranslation(
       .replace(/\s+/g, " ")
 
   const a = normalise(userAnswer)
-  const b = normalise(expected)
 
-  if (a === b) return { correct: true, similarity: 1 }
+  // Split on "/" to support multiple acceptable answers (e.g. "Tube/Underground")
+  const variants = expected.split("/").map((v) => normalise(v.trim()))
 
-  // Calculate simple similarity (character overlap)
-  const longer = a.length >= b.length ? a : b
-  const shorter = a.length < b.length ? a : b
+  let bestSimilarity = 0
 
-  if (longer.length === 0) return { correct: false, similarity: 0 }
+  for (const b of variants) {
+    if (a === b) return { correct: true, similarity: 1 }
 
-  // Levenshtein distance
-  const dist = levenshtein(shorter, longer)
-  const similarity = (longer.length - dist) / longer.length
+    const longer = a.length >= b.length ? a : b
+    const shorter = a.length < b.length ? a : b
 
-  // Accept if >= 85% similar (allows minor typos)
-  return { correct: similarity >= 0.85, similarity }
+    if (longer.length === 0) continue
+
+    const dist = levenshtein(shorter, longer)
+    const similarity = (longer.length - dist) / longer.length
+
+    if (similarity > bestSimilarity) bestSimilarity = similarity
+  }
+
+  // Accept if >= 85% similar to any variant (allows minor typos)
+  return { correct: bestSimilarity >= 0.85, similarity: bestSimilarity }
 }
 
 function levenshtein(a: string, b: string): number {
