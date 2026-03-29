@@ -70,6 +70,7 @@ export default function SessionPage() {
         allCards={cards}
         onAnswer={handleAnswer}
         onNext={handleNext}
+        cardIndex={currentIndex}
       />
     </div>
   )

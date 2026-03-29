@@ -17,6 +17,7 @@ interface GameRouterProps {
   allCards: ContentCard[]
   onAnswer: (correct: boolean) => void
   onNext?: () => void
+  cardIndex: number
 }
 
 export default function GameRouter({
@@ -24,6 +25,7 @@ export default function GameRouter({
   allCards,
   onAnswer,
   onNext,
+  cardIndex,
 }: GameRouterProps) {
   const mcOptions = useMemo(() => {
     if (
@@ -39,7 +41,9 @@ export default function GameRouter({
 
   // Unique key per card so React fully remounts each game component,
   // resetting all internal state (flipped, selected, input, etc.)
-  const cardKey = `${card.content.id}::${card.direction}::${card.gameFormat}`
+  // cardIndex ensures uniqueness even when the same card appears twice in a
+  // session (e.g. en→zh and zh→en both due) with the same direction + format.
+  const cardKey = `${cardIndex}::${card.content.id}::${card.direction}::${card.gameFormat}`
 
   return (
     <div className="space-y-3">
