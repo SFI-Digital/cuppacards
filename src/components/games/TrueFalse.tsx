@@ -109,7 +109,7 @@ export default function TrueFalse({
         </button>
       </div>
 
-      <AudioButton text={card.content.front.text} cardId={card.content.id} accent={card.content.front.lang as "en-GB" | "en-US"} />
+      <AudioButton text={card.content.front.text} cardId={card.content.id} />
     </div>
   )
 }
