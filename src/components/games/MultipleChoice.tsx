@@ -75,7 +75,7 @@ export default function MultipleChoice({
         })}
       </div>
 
-      <AudioButton text={card.content.front.text} />
+      <AudioButton text={card.content.front.text} cardId={card.content.id} accent={card.content.front.lang as "en-GB" | "en-US"} />
     </div>
   )
 }

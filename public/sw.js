@@ -1,4 +1,5 @@
 const CACHE_NAME = "cuppa-v1773060263612"
+const AUDIO_CACHE_NAME = "cuppa-audio-v1"
 
 const PRECACHE_URLS = [
   "/",
@@ -28,7 +29,7 @@ self.addEventListener("install", (event) => {
   )
 })
 
-// Activate — clean old caches
+// Activate — clean old caches (audio cache is intentionally kept across app version bumps)
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
@@ -36,7 +37,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== CACHE_NAME)
+            .filter((key) => key !== CACHE_NAME && key !== AUDIO_CACHE_NAME)
             .map((key) => caches.delete(key))
         )
       )
@@ -51,10 +52,31 @@ self.addEventListener("message", (event) => {
   }
 })
 
+async function cacheFirstAudio(request) {
+  const cached = await caches.match(request)
+  if (cached) return cached
+  try {
+    const response = await fetch(request)
+    if (response.ok) {
+      const cache = await caches.open(AUDIO_CACHE_NAME)
+      cache.put(request, response.clone())
+    }
+    return response
+  } catch {
+    return new Response("", { status: 408, statusText: "Offline" })
+  }
+}
+
 // Fetch — network first with cache fallback for everything
 self.addEventListener("fetch", (event) => {
   const { request } = event
   const url = new URL(request.url)
+
+  // Cache-first for Vercel Blob audio files (cross-origin)
+  if (request.method === "GET" && url.hostname.endsWith(".blob.vercel-storage.com")) {
+    event.respondWith(cacheFirstAudio(request))
+    return
+  }
 
   // Only handle same-origin GET requests
   if (url.origin !== self.location.origin) return

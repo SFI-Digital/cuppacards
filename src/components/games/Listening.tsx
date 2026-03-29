@@ -28,7 +28,7 @@ export default function Listening({ card, allCards, onAnswer }: ListeningProps) 
   useEffect(() => {
     if (!hasPlayed.current) {
       hasPlayed.current = true
-      speak(card.content.front.text)
+      speak(card.content.front.text, card.content.front.lang as "en-GB" | "en-US", card.content.id)
     }
   }, [card.content.front.text, speak])
 
@@ -42,7 +42,7 @@ export default function Listening({ card, allCards, onAnswer }: ListeningProps) 
   }
 
   const handleReplay = () => {
-    speak(card.content.front.text)
+    speak(card.content.front.text, card.content.front.lang as "en-GB" | "en-US", card.content.id)
   }
 
   return (

@@ -4,10 +4,12 @@ export interface SpeakerOptions {
   accent?: Accent
   rate?: number
   pitch?: number
+  cardId?: string
 }
 
 let voicesLoaded = false
 let cachedVoices: SpeechSynthesisVoice[] = []
+let currentAudio: HTMLAudioElement | null = null
 
 function ensureVoices(): Promise<SpeechSynthesisVoice[]> {
   if (voicesLoaded) return Promise.resolve(cachedVoices)
@@ -85,15 +87,22 @@ function pickVoice(
   return voices.find((v) => v.lang.startsWith("en"))
 }
 
-export function isSupported(): boolean {
-  return typeof window !== "undefined" && "speechSynthesis" in window
+function playAudioUrl(url: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (currentAudio) {
+      currentAudio.pause()
+      currentAudio = null
+    }
+    const audio = new Audio(url)
+    currentAudio = audio
+    audio.onended = () => resolve()
+    audio.onerror = () => reject(new Error(`Audio load failed: ${url}`))
+    audio.play().catch(reject)
+  })
 }
 
-export function speak(
-  text: string,
-  options: SpeakerOptions = {},
-): Promise<void> {
-  if (!isSupported()) {
+function speakWithSynthesis(text: string, options: SpeakerOptions): Promise<void> {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) {
     return Promise.reject(new Error("Speech synthesis not supported"))
   }
 
@@ -127,13 +136,41 @@ export function speak(
   )
 }
 
+export function isSupported(): boolean {
+  if (typeof window === "undefined") return false
+  const blobBase = process.env.NEXT_PUBLIC_BLOB_BASE_URL
+  if (blobBase) return true
+  return "speechSynthesis" in window
+}
+
+export function speak(
+  text: string,
+  options: SpeakerOptions = {},
+): Promise<void> {
+  const blobBase = process.env.NEXT_PUBLIC_BLOB_BASE_URL
+  const { cardId, accent = "en-GB" } = options
+
+  if (blobBase && cardId) {
+    return playAudioUrl(`${blobBase}/audio/${accent}/${cardId}.mp3`).catch(() =>
+      speakWithSynthesis(text, options),
+    )
+  }
+
+  return speakWithSynthesis(text, options)
+}
+
 export function stop(): void {
-  if (!isSupported()) return
-  window.speechSynthesis.cancel()
+  if (currentAudio) {
+    currentAudio.pause()
+    currentAudio = null
+  }
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    window.speechSynthesis.cancel()
+  }
 }
 
 export async function getAvailableVoices(accent: Accent): Promise<SpeechSynthesisVoice[]> {
-  if (!isSupported()) return []
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return []
   const voices = await ensureVoices()
   return voices.filter((v) => v.lang.startsWith(accent.split("-")[0]))
 }

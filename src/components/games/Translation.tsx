@@ -97,7 +97,7 @@ export default function Translation({ card, onAnswer }: TranslationProps) {
         )}
       </div>
 
-      <AudioButton text={card.content.front.text} />
+      <AudioButton text={card.content.front.text} cardId={card.content.id} accent={card.content.front.lang as "en-GB" | "en-US"} />
     </div>
   )
 }

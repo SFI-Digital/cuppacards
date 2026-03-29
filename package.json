@@ -7,7 +7,8 @@
     "prebuild": "node scripts/bump-sw-version.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate-audio": "npx tsx --tsconfig tsconfig.json scripts/generate-audio.ts"
   },
   "dependencies": {
     "next": "16.1.6",
@@ -22,9 +23,12 @@
     "@types/papaparse": "^5.5.2",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vercel/blob": "^0.27.0",
+    "dotenv": "^16.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
+    "tsx": "^4.19.0",
     "typescript": "^5"
   }
 }

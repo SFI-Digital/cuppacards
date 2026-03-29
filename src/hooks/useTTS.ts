@@ -9,8 +9,8 @@ export function useTTS() {
   const accent = useSettingsStore((s) => s.accent)
 
   const speak = useCallback(
-    (text: string, overrideAccent?: Accent) => {
-      return ttsSpeak(text, { accent: overrideAccent || accent })
+    (text: string, overrideAccent?: Accent, cardId?: string) => {
+      return ttsSpeak(text, { accent: overrideAccent || accent, cardId })
     },
     [accent],
   )

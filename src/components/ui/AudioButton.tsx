@@ -7,12 +7,14 @@ import type { Accent } from "@/lib/tts/speaker"
 interface AudioButtonProps {
   text: string
   accent?: Accent
+  cardId?: string
   className?: string
 }
 
 export default function AudioButton({
   text,
   accent,
+  cardId,
   className = "",
 }: AudioButtonProps) {
   const { speak, isSupported } = useTTS()
@@ -23,7 +25,7 @@ export default function AudioButton({
   const handleClick = async () => {
     setPlaying(true)
     try {
-      await speak(text, accent)
+      await speak(text, accent, cardId)
     } catch {
       // speech cancelled or error — ignore
     } finally {
