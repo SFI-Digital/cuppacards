@@ -12,6 +12,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "\u9996\u9801", icon: "\uD83C\uDFE0" },
   { href: "/session", label: "\u7DF4\u7FD2", icon: "\uD83C\uDCCF" },
+  { href: "/cards", label: "\u5361\u7247", icon: "\uD83D\uDCD6" },
   { href: "/progress", label: "\u9032\u5EA6", icon: "\uD83D\uDCCA" },
   { href: "/settings", label: "\u8A2D\u5B9A", icon: "\u2699\uFE0F" },
 ]

@@ -46,9 +46,20 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
 
         {flipped ? (
           <div className="mt-4 border-t border-zinc-100 pt-4 dark:border-zinc-800">
-            <p className="text-lg text-zinc-700 dark:text-zinc-300">
-              {answer}
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="text-lg text-zinc-700 dark:text-zinc-300">
+                {answer}
+              </p>
+              <a
+                href={`https://www.google.com/search?q=${encodeURIComponent(card.content.front.text + " meaning")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="shrink-0 rounded-md bg-zinc-100 p-1 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img src="/Google-icon.webp" alt="Google" className="h-4 w-4" />
+              </a>
+            </div>
 
             {card.content.supplement.meant && (
               <div className="mt-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">
