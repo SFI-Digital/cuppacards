@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useContentStore } from "@/stores/contentStore"
 import { useSessionStore } from "@/stores/sessionStore"
@@ -8,9 +9,17 @@ import { useSettingsStore } from "@/stores/settingsStore"
 import { useProgress } from "@/hooks/useProgress"
 import Button from "@/components/ui/Button"
 import Card from "@/components/ui/Card"
+import storage from "@/lib/storage/store"
 
 export default function Home() {
   const router = useRouter()
+
+  // Redirect first-time users to onboarding
+  useEffect(() => {
+    if (!storage.has("onboarding_complete")) {
+      router.replace("/intro")
+    }
+  }, [router])
   const cards = useContentStore((s) => s.cards)
   const hasSentences = useContentStore((s) => s.cards.some((c) => c.type === "sentence"))
   const isLoading = useContentStore((s) => s.isLoading)
