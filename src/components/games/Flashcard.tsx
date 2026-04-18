@@ -15,6 +15,7 @@ interface FlashcardProps {
 
 export default function Flashcard({ card, onAnswer }: FlashcardProps) {
   const [flipped, setFlipped] = useState(false)
+  const [answered, setAnswered] = useState(false)
   const allCards = useContentStore((s) => s.cards)
 
   // Vocab lookup for phrases and sentences
@@ -130,7 +131,8 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
             variant="danger"
             size="lg"
             className="flex-1"
-            onClick={() => onAnswer(false)}
+            disabled={answered}
+            onClick={() => { setAnswered(true); onAnswer(false) }}
           >
             不會
           </Button>
@@ -138,7 +140,8 @@ export default function Flashcard({ card, onAnswer }: FlashcardProps) {
             variant="primary"
             size="lg"
             className="flex-1"
-            onClick={() => onAnswer(true)}
+            disabled={answered}
+            onClick={() => { setAnswered(true); onAnswer(true) }}
           >
             記住了
           </Button>

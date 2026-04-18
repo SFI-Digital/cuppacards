@@ -41,15 +41,17 @@ export default function SessionPage() {
 
   const handleAnswer = (correct: boolean) => {
     if (!currentCard) return
+    // Capture the card at click time to guard against double-calls
+    const card = currentCard
     answerCurrent(correct)
     // Only update SRS progress for non-read-aloud cards
-    if (currentCard.gameFormat !== "read-aloud") {
-      updateProgress(currentCard.content.id, currentCard.direction, correct)
+    if (card.gameFormat !== "read-aloud") {
+      updateProgress(card.content.id, card.direction, correct)
     }
 
     setTimeout(() => {
       nextCard()
-    }, currentCard.gameFormat === "flashcard" ? 0 : 200)
+    }, 300)
   }
 
   // For read-aloud cards, just advance without scoring
